@@ -1,57 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
+import DishForm from './components/DishForm/DishForm';
+import pizzaPhoto from './pictures/pizza.jpg';
+import sandwichPhoto from './pictures/sandwich.jpg';
+import soupPhoto from './pictures/soup.jpeg';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <React.Fragment>
+      <div className='absolute flex flex-col lg:flex-row w-full h-full'>
+        <img src={pizzaPhoto} alt="pizza" className='h-1/3 lg:w-1/3 lg:h-full object-cover'/>
+        <img src={sandwichPhoto} alt="sandwich" className='h-1/3 lg:w-1/3 lg:h-full object-cover'/>
+        <img src={soupPhoto} alt="soup" className='h-1/3 lg:w-1/3 lg:h-full object-cover'/>
+      </div>
+      <div className='absolute w-full h-full bg-black opacity-70'></div>
+      <DishForm/>
+    </React.Fragment>
   );
 }
 

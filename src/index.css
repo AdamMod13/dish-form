@@ -1,13 +1,33 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer components {
+  .input-container {
+    @apply w-full px-5 pb-4 space-y-2 text-text-100 flex flex-col items-start justify-between text-base
+  }
+
+  .input-container-with-animation {
+    @apply w-full px-5 py-6 relative text-base text-text-100
+  }
+
+  .input-with-animation {
+    @apply w-full bg-bg-100 px-4 py-3 outline-none shadow-md cursor-pointer invalid:shadow-red-500 invalid:shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg hover:invalid:shadow-red-500;
+  }
+
+  .label-with-animation {
+    @apply transform transition-all duration-200 ease-in-out absolute top-0 left-0 h-full flex items-center pl-9 group-focus-within:h-1/6 peer-valid:h-1/6 group-focus-within:-translate-y-1/4 peer-valid:-translate-y-1/4 group-focus-within:pl-5 peer-valid:pl-5
+  }
+
+  .input-default {
+    @apply px-4 py-3 w-full bg-bg-100 cursor-pointer shadow-md outline-none invalid:shadow-red-500 invalid:shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg hover:invalid:shadow-red-500;
+  }
+  
+  .button {
+    @apply bg-primary-200 text-white text-lg font-semibold px-4 py-2 border rounded-full cursor-pointer hover:shadow-lg active:scale-95 ease-out transition transform duration-100 disabled:opacity-50;
+  }
+
+  .alert {
+    @apply z-50 fixed right-5 bottom-10 px-6 py-3 rounded-md shadow-md transition-opacity duration-300 ease-in-out
+  }
 }
