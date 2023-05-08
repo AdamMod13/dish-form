@@ -1,22 +1,15 @@
-import { Dispatch, useEffect, useState } from "react";
+import { Dispatch, useEffect, useState, useCallback } from "react";
 import { Field, InjectedFormProps, reduxForm, reset } from "redux-form";
 import axios from "axios";
 import Alert from "../UI/Alert";
 import { AnyAction } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
-
-interface IDishForm {
-  name: string;
-  preparation_time: string;
-  type: string;
-  no_of_slices?: number;
-  diameter?: number;
-  spiciness_scale?: number;
-  slices_of_bread?: number;
-}
-
-const validateRequired = (value: any) =>
-  !value || value.length === 0 ? "Required" : null;
+import { IDishForm } from "../../models/DishFormProps";
+import {
+  validateRequired,
+  validateRequiredPizzaFields,
+  validateRequiredSandwichFields,
+  validateRequiredSoupFields,
+} from "../../validations/dishFormValidations";
 
 const DishForm: React.FC<InjectedFormProps<IDishForm>> = ({
   handleSubmit,
@@ -27,29 +20,32 @@ const DishForm: React.FC<InjectedFormProps<IDishForm>> = ({
   submitSucceeded,
   submitFailed,
   submitting,
+  reset,
 }) => {
-  const dispatch = useDispatch();
-
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState<boolean>(false);
 
-  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const fieldsToClear = [
-      "no_of_slices",
-      "diameter",
-      "spiciness_scale",
-      "slices_of_bread",
-    ];
-    for (let i = 0; i < fieldsToClear.length; i++) {
-      change(fieldsToClear[i], null);
-    }
-    setSelectedType(event.target.value);
-  };
+  const handleTypeChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const fieldsToClear = [
+        "no_of_slices",
+        "diameter",
+        "spiciness_scale",
+        "slices_of_bread",
+      ];
+      for (let i = 0; i < fieldsToClear.length; i++) {
+        change(fieldsToClear[i], null);
+      }
 
-  const resetForm = () => {
-    dispatch(reset('dishForm'));
+      setSelectedType(event.target.value);
+    },
+    [change]
+  );
+
+  const resetForm = useCallback(() => {
+    reset();
     setSelectedType(null);
-  };
+  }, [reset]);
 
   useEffect(() => {
     if (submitSucceeded || submitFailed) {
@@ -63,8 +59,6 @@ const DishForm: React.FC<InjectedFormProps<IDishForm>> = ({
   useEffect(() => {
     if (submitSucceeded) setSelectedType(null);
   }, [submitSucceeded]);
-
-  console.log(invalid)
 
   return (
     <div className="h-screen flex items-center justify-center">
@@ -131,7 +125,7 @@ const DishForm: React.FC<InjectedFormProps<IDishForm>> = ({
                 type="number"
                 min="1"
                 required
-                validate={validateRequired}
+                validate={validateRequiredPizzaFields}
               />
               <label htmlFor="no_of_slices" className="label-with-animation">
                 Number of slices<span className="text-red-500">*</span>:
@@ -146,7 +140,7 @@ const DishForm: React.FC<InjectedFormProps<IDishForm>> = ({
                 min="0"
                 step="0.1"
                 required
-                validate={validateRequired}
+                validate={validateRequiredPizzaFields}
               />
               <label htmlFor="diameter" className="label-with-animation">
                 Diameter<span className="text-red-500">*</span>:
@@ -164,7 +158,7 @@ const DishForm: React.FC<InjectedFormProps<IDishForm>> = ({
               min="1"
               max="10"
               required
-              validate={validateRequired}
+              validate={validateRequiredSoupFields}
             />
             <label htmlFor="diameter" className="label-with-animation">
               Spiciness Scale<span className="text-red-500">*</span>:
@@ -180,7 +174,7 @@ const DishForm: React.FC<InjectedFormProps<IDishForm>> = ({
               type="number"
               min="1"
               required
-              validate={validateRequired}
+              validate={validateRequiredSandwichFields}
             />
             <label htmlFor="slices_of_bread" className="label-with-animation">
               Number of Slices of Bread<span className="text-red-500">*</span>:
@@ -200,16 +194,13 @@ const DishForm: React.FC<InjectedFormProps<IDishForm>> = ({
             Clear
           </button>
         </div>
-        {showAlert && (
-          <Alert isError={!submitSucceeded} />
-        )}
+        {showAlert && <Alert isError={!submitSucceeded} />}
       </form>
     </div>
   );
 };
 
 const submitForm = (values: IDishForm, dispatch: Dispatch<AnyAction>) => {
-  console.log(values);
   return axios
     .post(
       "https://umzzcc503l.execute-api.us-west-2.amazonaws.com/dishes/",
